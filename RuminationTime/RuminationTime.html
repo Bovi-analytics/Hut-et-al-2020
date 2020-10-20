@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+  padding-top: 0px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 id="rumination-time">Rumination Time</h1>
+<ul>
+<li><a href="#read-the-data">Read the data</a></li>
+<li><a href="#data-preparation">Data preparation</a>
+<ul>
+<li><a href="#baseline-model-without-any-variable">Baseline model without any variable</a></li>
+<li><a href="#full-model-using-the-nested-repeated-measures-glmm">Full model using the nested repeated measures GLMM</a></li>
+<li><a href="#comparison-of-baseline-and-nested-model">Comparison of baseline and nested model</a></li>
+<li><a href="#full-model">Full model</a></li>
+<li><a href="#model-fit-2-way-interactions">Model fit 2-way interactions</a></li>
+</ul></li>
+<li><a href="#final-model">Final model</a>
+<ul>
+<li><a href="#model-fit">Model fit</a></li>
+<li><a href="#type-3-analysis-of-variance">Type 3 Analysis of Variance</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#parameter-estimate-confidence-intervals">Parameter estimate confidence intervals</a></li>
+<li><a href="#least-square-means">Least square means</a></li>
+<li><a href="#interaction-term-contrasts">Interaction term contrasts</a></li>
+</ul></li>
+</ul>
+<h1 id="read-the-data">Read the data</h1>
+<ul>
+<li>Filter only the locomotion scores</li>
+<li>Refactor the scores to only 3 classes (1-2 vs 3 vs 4-5)</li>
+<li>Refactor the observation moments</li>
+</ul>
+<!-- end list -->
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">load</span>(<span class="st">&quot;../Data/AllData.RData&quot;</span>)</a></code></pre></div>
+<h1 id="data-preparation">Data preparation</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">AnalysisData &lt;-<span class="st"> </span>AllData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(</a>
+<a class="sourceLine" id="cb2-2" title="2">                                SensorType  <span class="op">%like%</span><span class="st"> &quot;ruminatingTimeDataDay&quot;</span></a>
+<a class="sourceLine" id="cb2-3" title="3">    ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="st">   </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb2-5" title="5">                  <span class="dt">CalvingTime =</span> <span class="kw">as.Date</span>(CalvingTime,<span class="dt">format =</span> <span class="st">&quot;%Y-%m-%dT%H:%M:%OSZ&quot;</span>),</a>
+<a class="sourceLine" id="cb2-6" title="6">                  <span class="dt">CalvingSeason =</span> <span class="kw">case_when</span>(</a>
+<a class="sourceLine" id="cb2-7" title="7">                    <span class="kw">between</span>(<span class="kw">month</span>(CalvingTime), <span class="dv">1</span>, <span class="dv">3</span>) <span class="op">~</span><span class="st"> &quot;Winter&quot;</span>,</a>
+<a class="sourceLine" id="cb2-8" title="8">                    <span class="kw">between</span>(<span class="kw">month</span>(CalvingTime), <span class="dv">4</span>, <span class="dv">6</span>) <span class="op">~</span><span class="st"> &quot;Spring&quot;</span>,</a>
+<a class="sourceLine" id="cb2-9" title="9">                    <span class="kw">between</span>(<span class="kw">month</span>(CalvingTime), <span class="dv">7</span>, <span class="dv">9</span>) <span class="op">~</span><span class="st"> &quot;Summer&quot;</span>,</a>
+<a class="sourceLine" id="cb2-10" title="10">                    <span class="kw">between</span>(<span class="kw">month</span>(CalvingTime), <span class="dv">10</span>, <span class="dv">12</span>) <span class="op">~</span><span class="st"> &quot;Autumn&quot;</span>)</a>
+<a class="sourceLine" id="cb2-11" title="11">                  ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(</a>
+<a class="sourceLine" id="cb2-13" title="13">    AnimalNumber,</a>
+<a class="sourceLine" id="cb2-14" title="14">    HerdIdentifier,</a>
+<a class="sourceLine" id="cb2-15" title="15">    ObservationMoment,</a>
+<a class="sourceLine" id="cb2-16" title="16">    LocomotionScore,</a>
+<a class="sourceLine" id="cb2-17" title="17">    ObservationPeriod,</a>
+<a class="sourceLine" id="cb2-18" title="18">    LactationNumber,</a>
+<a class="sourceLine" id="cb2-19" title="19">    Parity,</a>
+<a class="sourceLine" id="cb2-20" title="20">    CalvingSeason</a>
+<a class="sourceLine" id="cb2-21" title="21">    ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(</a>
+<a class="sourceLine" id="cb2-23" title="23">    <span class="dt">SensorValue =</span> <span class="kw">mean</span>(SensorValue,<span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb2-24" title="24">    <span class="dt">SensorValues =</span> <span class="kw">n</span>()</a>
+<a class="sourceLine" id="cb2-25" title="25">    )  <span class="op">%&gt;%</span><span class="st">  </span></a>
+<a class="sourceLine" id="cb2-26" title="26"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(</a>
+<a class="sourceLine" id="cb2-27" title="27">    SensorValues <span class="op">==</span><span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb2-28" title="28">  ) <span class="op">%&gt;%</span><span class="st">  </span></a>
+<a class="sourceLine" id="cb2-29" title="29"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(AnimalNumber,HerdIdentifier) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-30" title="30"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(AnimalNumber, HerdIdentifier) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-31" title="31"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">LocomotionMoments =</span> <span class="kw">length</span>(LocomotionScore)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-32" title="32"><span class="st">  </span><span class="kw">filter</span>(LocomotionMoments <span class="op">==</span><span class="st"> </span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co">#4 locomotionscores minimum</span></a>
+<a class="sourceLine" id="cb2-33" title="33"><span class="st">  </span><span class="kw">drop_na</span>()</a>
+<a class="sourceLine" id="cb2-34" title="34"></a>
+<a class="sourceLine" id="cb2-35" title="35">AnalysisData <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="st">&quot;HerdIdentifier&quot;</span>, <span class="st">&quot;AnimalNumber&quot;</span>, <span class="st">&quot;LactationNumber&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">n_distinct</span>()</a></code></pre></div>
+<pre><code>## [1] 526
+</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">hist</span>(AnalysisData<span class="op">$</span>SensorValue,</a>
+<a class="sourceLine" id="cb4-2" title="2">     <span class="dt">main =</span> <span class="st">&quot;Rumination behaviour (min/day)&quot;</span>,</a>
+<a class="sourceLine" id="cb4-3" title="3">     <span class="dt">xlab =</span> <span class="st">&quot;Rumination minutes per day&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<h2 id="baseline-model-without-any-variable">Baseline model without any variable</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">baselineLMM &lt;-<span class="st"> </span><span class="kw">lmer</span>(</a>
+<a class="sourceLine" id="cb5-2" title="2">                  SensorValue <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span><span class="st"> </span>AnimalNumber), </a>
+<a class="sourceLine" id="cb5-3" title="3">                  <span class="dt">REML =</span> F,</a>
+<a class="sourceLine" id="cb5-4" title="4">                  <span class="dt">data =</span> AnalysisData</a>
+<a class="sourceLine" id="cb5-5" title="5">                  )</a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="kw">qqnorm</span>(<span class="kw">residuals</span>(baselineLMM))</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<h2 id="full-model-using-the-nested-repeated-measures-glmm">Full model using the nested repeated measures GLMM</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">LMM &lt;-<span class="st"> </span><span class="kw">lmer</span>(</a>
+<a class="sourceLine" id="cb6-2" title="2">                  SensorValue <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="st">                    </span>LocomotionScore <span class="op">+</span><span class="st"> </span>ObservationPeriod <span class="op">+</span><span class="st"> </span>ObservationMoment <span class="op">+</span><span class="st"> </span>CalvingSeason <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="st">                    </span>ObservationPeriod<span class="op">:</span>ObservationMoment <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="st">                    </span>ObservationPeriod<span class="op">:</span>LocomotionScore <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="st">                    </span>ObservationMoment<span class="op">:</span>LocomotionScore <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="st">                    </span>ObservationPeriod<span class="op">:</span>LocomotionScore<span class="op">:</span>ObservationMoment <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="st">                    </span>HerdIdentifier <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="st">                    </span>Parity <span class="op">+</span><span class="st">  </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>AnimalNumber),</a>
+<a class="sourceLine" id="cb6-10" title="10">                  <span class="dt">REML =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb6-11" title="11">                  <span class="dt">data =</span> AnalysisData</a>
+<a class="sourceLine" id="cb6-12" title="12">                  )</a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="kw">qqnorm</span>(<span class="kw">residuals</span>(LMM))</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<h2 id="comparison-of-baseline-and-nested-model">Comparison of baseline and nested model</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">anova</span>(LMM, baselineLMM, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Data: AnalysisData
+## Models:
+## baselineLMM: SensorValue ~ 1 + (1 | AnimalNumber)
+## LMM: SensorValue ~ LocomotionScore + ObservationPeriod + ObservationMoment + 
+## LMM:     CalvingSeason + ObservationPeriod:ObservationMoment + ObservationPeriod:LocomotionScore + 
+## LMM:     ObservationMoment:LocomotionScore + ObservationPeriod:LocomotionScore:ObservationMoment + 
+## LMM:     HerdIdentifier + Parity + (1 | AnimalNumber)
+##             Df   AIC   BIC logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+## baselineLMM  3 23376 23393 -11685    23370                             
+## LMM         26 22961 23107 -11454    22909 461.59     23  &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+<h2 id="full-model">Full model</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">LMMdrop &lt;-<span class="st"> </span><span class="kw">drop1</span>(LMM, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="cf">if</span>(<span class="st">&quot;Pr(&gt;F)&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">colnames</span>(LMMdrop))</a>
+<a class="sourceLine" id="cb9-3" title="3">{</a>
+<a class="sourceLine" id="cb9-4" title="4">  Pvalues &lt;-<span class="st"> </span>LMMdrop<span class="op">$</span><span class="st">`</span><span class="dt">Pr(&gt;F)</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb9-5" title="5">} <span class="cf">else</span> </a>
+<a class="sourceLine" id="cb9-6" title="6">{</a>
+<a class="sourceLine" id="cb9-7" title="7">  Pvalues &lt;-<span class="st"> </span>LMMdrop<span class="op">$</span><span class="st">`</span><span class="dt">Pr(Chi)</span><span class="st">`</span></a>
+<a class="sourceLine" id="cb9-8" title="8">}</a>
+<a class="sourceLine" id="cb9-9" title="9">LMMdrop</a></code></pre></div>
+<pre><code>## Single term deletions using Satterthwaite&#39;s method:
+## 
+## Model:
+## SensorValue ~ LocomotionScore + ObservationPeriod + ObservationMoment + 
+##     CalvingSeason + ObservationPeriod:ObservationMoment + ObservationPeriod:LocomotionScore + 
+##     ObservationMoment:LocomotionScore + ObservationPeriod:LocomotionScore:ObservationMoment + 
+##     HerdIdentifier + Parity + (1 | AnimalNumber)
+##                                                     Sum Sq Mean Sq NumDF   DenDF F value    Pr(&gt;F)    
+## CalvingSeason                                        50091   16697     3  545.29  5.0984  0.001734 ** 
+## HerdIdentifier                                      355516   50788     7  514.36 15.5083 &lt; 2.2e-16 ***
+## Parity                                               83589   41794     2  564.70 12.7621 3.794e-06 ***
+## LocomotionScore:ObservationPeriod:ObservationMoment   5373    2687     2 1737.79  0.8204  0.440430    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+<h2 id="model-fit-2-way-interactions">Model fit 2-way interactions</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">LMMReduced =<span class="st"> </span><span class="kw">update</span>(LMM, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>LocomotionScore<span class="op">:</span>ObservationPeriod<span class="op">:</span>ObservationMoment)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw">drop1</span>(LMMReduced, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions using Satterthwaite&#39;s method:
+## 
+## Model:
+## SensorValue ~ LocomotionScore + ObservationPeriod + ObservationMoment + 
+##     CalvingSeason + HerdIdentifier + Parity + (1 | AnimalNumber) + 
+##     ObservationPeriod:ObservationMoment + LocomotionScore:ObservationPeriod + 
+##     LocomotionScore:ObservationMoment
+##                                     Sum Sq Mean Sq NumDF   DenDF F value    Pr(&gt;F)    
+## CalvingSeason                        50412   16804     3  545.14  5.1236 0.0016754 ** 
+## HerdIdentifier                      357324   51046     7  514.28 15.5643 &lt; 2.2e-16 ***
+## Parity                               84416   42208     2  564.70 12.8695 3.424e-06 ***
+## ObservationPeriod:ObservationMoment  36920   36920     1 1537.23 11.2572 0.0008124 ***
+## LocomotionScore:ObservationPeriod    11215    5608     2 1772.54  1.7098 0.1812025    
+## LocomotionScore:ObservationMoment      164      82     2 1731.41  0.0250 0.9753247    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+<h1 id="final-model">Final model</h1>
+<h2 id="model-fit">Model fit</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">LMMReduced =<span class="st"> </span><span class="kw">update</span>(LMMReduced, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>LocomotionScore<span class="op">:</span>ObservationMoment <span class="op">-</span><span class="st"> </span>LocomotionScore<span class="op">:</span>ObservationPeriod)</a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="kw">drop1</span>(LMMReduced, <span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</a></code></pre></div>
+<pre><code>## Single term deletions using Satterthwaite&#39;s method:
+## 
+## Model:
+## SensorValue ~ LocomotionScore + ObservationPeriod + ObservationMoment + 
+##     CalvingSeason + HerdIdentifier + Parity + (1 | AnimalNumber) + 
+##     ObservationPeriod:ObservationMoment
+##                                     Sum Sq Mean Sq NumDF   DenDF F value    Pr(&gt;F)    
+## LocomotionScore                       9915    4958     2 1931.17  1.5077 0.2216879    
+## CalvingSeason                        48102   16034     3  542.78  4.8761 0.0023548 ** 
+## HerdIdentifier                      363378   51911     7  513.38 15.7867 &lt; 2.2e-16 ***
+## Parity                               83461   41731     2  564.23 12.6907 4.063e-06 ***
+## ObservationPeriod:ObservationMoment  39783   39783     1 1532.97 12.0985 0.0005187 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+<h2 id="type-3-analysis-of-variance">Type 3 Analysis of Variance</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">Anova</span>(LMMReduced, <span class="dt">ddf=</span><span class="st">&quot;Satterthwaite&quot;</span>)</a></code></pre></div>
+<pre><code>## Analysis of Deviance Table (Type II Wald chisquare tests)
+## 
+## Response: SensorValue
+##                                        Chisq Df Pr(&gt;Chisq)    
+## LocomotionScore                       3.0153  2  0.2214274    
+## ObservationPeriod                   315.5414  1  &lt; 2.2e-16 ***
+## ObservationMoment                     1.9095  1  0.1670147    
+## CalvingSeason                        14.6282  3  0.0021636 ** 
+## HerdIdentifier                      110.5068  7  &lt; 2.2e-16 ***
+## Parity                               25.3814  2   3.08e-06 ***
+## ObservationPeriod:ObservationMoment  12.0985  1  0.0005046 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+<h2 id="summary">Summary</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">print</span>(<span class="kw">summary</span>(LMMReduced, <span class="dt">ddf=</span><span class="st">&quot;Satterthwaite&quot;</span>),<span class="dt">correlation=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<pre><code>## Linear mixed model fit by maximum likelihood . t-tests use Satterthwaite&#39;s method [&#39;lmerModLmerTest&#39;]
+## Formula: SensorValue ~ LocomotionScore + ObservationPeriod + ObservationMoment +  
+##     CalvingSeason + HerdIdentifier + Parity + (1 | AnimalNumber) +      ObservationPeriod:ObservationMoment
+##    Data: AnalysisData
+## 
+##      AIC      BIC   logLik deviance df.resid 
+##  22953.9  23066.3 -11456.9  22913.9     2023 
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.9073 -0.5034  0.0493  0.5685  3.1735 
+## 
+## Random effects:
+##  Groups       Name        Variance Std.Dev.
+##  AnimalNumber (Intercept) 1695     41.17   
+##  Residual                 3288     57.34   
+## Number of obs: 2043, groups:  AnimalNumber, 511
+## 
+## Fixed effects:
+##                                                       Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept)                                           552.0946     9.5394  590.2439  57.875  &lt; 2e-16 ***
+## LocomotionScore3                                        0.5373     4.1221 1872.0727   0.130 0.896303    
+## LocomotionScore4-5                                     -5.9421     3.7407 1987.9768  -1.588 0.112334    
+## ObservationPeriodPost Partum                           36.9976     3.6225 1545.4877  10.213  &lt; 2e-16 ***
+## ObservationMomentSecond                               -12.4013     3.6044 1534.2629  -3.441 0.000596 ***
+## CalvingSeasonSpring                                     3.2342     7.2009  564.5709   0.449 0.653503    
+## CalvingSeasonSummer                                   -14.1360     5.7654  534.7454  -2.452 0.014530 *  
+## CalvingSeasonWinter                                     7.5367     6.7913  549.0062   1.110 0.267585    
+## HerdIdentifier544                                      27.5659     9.5770  512.7772   2.878 0.004164 ** 
+## HerdIdentifier2011                                    -38.7737     8.9951  512.7416  -4.311 1.95e-05 ***
+## HerdIdentifier2297                                     16.7181     9.6881  513.5278   1.726 0.085013 .  
+## HerdIdentifier2514                                    -23.3921    10.5337  516.5538  -2.221 0.026806 *  
+## HerdIdentifier2746                                     -7.1910    10.1831  512.6176  -0.706 0.480407    
+## HerdIdentifier3314                                    -35.1327    10.2798  525.6436  -3.418 0.000681 ***
+## HerdIdentifier5888                                     -9.4535    10.1657  510.7511  -0.930 0.352843    
+## Parity3                                               -15.4632     5.6050  580.0576  -2.759 0.005984 ** 
+## Parity&gt;3                                              -26.7395     5.3350  556.1482  -5.012 7.25e-07 ***
+## ObservationPeriodPost Partum:ObservationMomentSecond   17.6772     5.0821 1532.9675   3.478 0.000519 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+</code></pre>
+<h2 id="parameter-estimate-confidence-intervals">Parameter estimate confidence intervals</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">confint</span>(LMMReduced, <span class="dt">parm=</span><span class="st">&quot;beta_&quot;</span>)</a></code></pre></div>
+<pre><code>## Computing profile confidence intervals ...
+
+##                                                           2.5 %     97.5 %
+## (Intercept)                                          533.376873 570.834654
+## LocomotionScore3                                      -7.549662   8.620936
+## LocomotionScore4-5                                   -13.286812   1.399070
+## ObservationPeriodPost Partum                          29.893834  44.102721
+## ObservationMomentSecond                              -19.469890  -5.331898
+## CalvingSeasonSpring                                  -10.917773  17.361742
+## CalvingSeasonSummer                                  -25.457442  -2.816907
+## CalvingSeasonWinter                                   -5.800204  20.868034
+## HerdIdentifier544                                      8.756477  46.368112
+## HerdIdentifier2011                                   -56.443456 -21.116297
+## HerdIdentifier2297                                    -2.311097  35.737001
+## HerdIdentifier2514                                   -44.086442  -2.716478
+## HerdIdentifier2746                                   -27.197283  12.796354
+## HerdIdentifier3314                                   -55.330054 -14.958019
+## HerdIdentifier5888                                   -29.419697  10.504485
+## Parity3                                              -26.472307  -4.463916
+## Parity&gt;3                                             -37.237274 -16.276629
+## ObservationPeriodPost Partum:ObservationMomentSecond   7.710123  27.644253
+</code></pre>
+<h2 id="least-square-means">Least square means</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>HerdIdentifier), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>##  HerdIdentifier lsmean   SE  df lower.CL upper.CL .group
+##  2011              513 5.07 555      499      527  a    
+##  3314              517 6.95 543      498      536  ab   
+##  2514              529 7.53 531      508      549  abc  
+##  5888              543 7.22 540      523      562   bcd 
+##  2746              545 6.90 542      526      564   bcd 
+##  3                 552 7.59 545      531      573    cde
+##  2297              569 6.45 538      551      586     de
+##  544               580 6.06 538      563      596      e
+## 
+## Results are averaged over the levels of: LocomotionScore, ObservationPeriod, ObservationMoment, CalvingSeason, Parity 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 8 estimates 
+## P value adjustment: tukey method for comparing a family of 8 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>CalvingSeason), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>##  CalvingSeason lsmean   SE  df lower.CL upper.CL .group
+##  Summer           530 3.90 562      520      540  a    
+##  Autumn           544 4.61 569      533      556  ab   
+##  Spring           547 5.62 595      533      561  ab   
+##  Winter           552 5.31 576      539      565   b   
+## 
+## Results are averaged over the levels of: LocomotionScore, ObservationPeriod, ObservationMoment, HerdIdentifier, Parity 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 4 estimates 
+## P value adjustment: tukey method for comparing a family of 4 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>LocomotionScore), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>##  LocomotionScore lsmean   SE   df lower.CL upper.CL .group
+##  4-5                539 3.48 1339      531      548  a    
+##  1-2                545 2.86  856      538      552  a    
+##  3                  546 4.09 1792      536      555  a    
+## 
+## Results are averaged over the levels of: ObservationPeriod, ObservationMoment, CalvingSeason, HerdIdentifier, Parity 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 3 estimates 
+## P value adjustment: tukey method for comparing a family of 3 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>ObservationPeriod), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>## NOTE: Results may be misleading due to involvement in interactions
+
+##  ObservationPeriod lsmean   SE  df lower.CL upper.CL .group
+##  Pre Partum           520 2.91 987      514      527  a    
+##  Post Partum          566 2.82 900      560      573   b   
+## 
+## Results are averaged over the levels of: LocomotionScore, ObservationMoment, CalvingSeason, HerdIdentifier, Parity 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 2 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>ObservationMoment), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>## NOTE: Results may be misleading due to involvement in interactions
+
+##  ObservationMoment lsmean   SE  df lower.CL upper.CL .group
+##  Second               542 2.85 927      535      548  a    
+##  First                545 2.87 946      539      552  a    
+## 
+## Results are averaged over the levels of: LocomotionScore, ObservationPeriod, CalvingSeason, HerdIdentifier, Parity 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 2 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>Parity), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>##  Parity lsmean   SE  df lower.CL upper.CL .group
+##  &gt;3        531 3.98 553      521      540  a    
+##  3         542 4.46 605      531      553  a    
+##  2         557 3.93 633      548      567   b   
+## 
+## Results are averaged over the levels of: LocomotionScore, ObservationPeriod, ObservationMoment, CalvingSeason, HerdIdentifier 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 3 estimates 
+## P value adjustment: tukey method for comparing a family of 3 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">multcomp<span class="op">::</span><span class="kw">cld</span>(lsmeans<span class="op">::</span><span class="kw">lsmeans</span>(LMMReduced, <span class="op">~</span><span class="st"> </span>ObservationMoment<span class="op">|</span>ObservationPeriod), <span class="dt">alpha=</span><span class="fl">0.05</span>, <span class="dt">Letters=</span>letters, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)</a></code></pre></div>
+<pre><code>## ObservationPeriod = Pre Partum:
+##  ObservationMoment lsmean   SE   df lower.CL upper.CL .group
+##  Second               514 3.42 1529      507      522  a    
+##  First                527 3.43 1538      519      534   b   
+## 
+## ObservationPeriod = Post Partum:
+##  ObservationMoment lsmean   SE   df lower.CL upper.CL .group
+##  First                564 3.36 1476      556      571  a    
+##  Second               569 3.33 1463      561      576  a    
+## 
+## Results are averaged over the levels of: LocomotionScore, CalvingSeason, HerdIdentifier, Parity 
+## Degrees-of-freedom method: kenward-roger 
+## Confidence level used: 0.95 
+## Conf-level adjustment: sidak method for 2 estimates 
+## significance level used: alpha = 0.05
+</code></pre>
+<h2 id="interaction-term-contrasts">Interaction term contrasts</h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">summary</span>(multcomp<span class="op">::</span><span class="kw">glht</span>(LMMReduced,  <span class="kw">lsm</span>(pairwise <span class="op">~</span><span class="st"> </span>ObservationMoment<span class="op">|</span>ObservationPeriod, <span class="dt">adjust=</span><span class="st">&quot;tukey&quot;</span>)))</a></code></pre></div>
+<pre><code>## Note: df set to 1539
+
+## $`ObservationPeriod = Pre Partum`
+## 
+##   Simultaneous Tests for General Linear Hypotheses
+## 
+## Fit: lmer(formula = SensorValue ~ LocomotionScore + ObservationPeriod + 
+##     ObservationMoment + CalvingSeason + HerdIdentifier + Parity + 
+##     (1 | AnimalNumber) + ObservationPeriod:ObservationMoment, 
+##     data = AnalysisData, REML = FALSE)
+## 
+## Linear Hypotheses:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## First - Second == 0   12.401      3.604   3.441 0.000596 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## (Adjusted p values reported -- single-step method)
+## 
+## 
+## $`ObservationPeriod = Post Partum`
+## 
+##   Simultaneous Tests for General Linear Hypotheses
+## 
+## Fit: lmer(formula = SensorValue ~ LocomotionScore + ObservationPeriod + 
+##     ObservationMoment + CalvingSeason + HerdIdentifier + Parity + 
+##     (1 | AnimalNumber) + ObservationPeriod:ObservationMoment, 
+##     data = AnalysisData, REML = FALSE)
+## 
+## Linear Hypotheses:
+##                     Estimate Std. Error t value Pr(&gt;|t|)
+## First - Second == 0   -5.276      3.584  -1.472    0.141
+## (Adjusted p values reported -- single-step method)
+</code></pre>
+
+</body>
+</html>

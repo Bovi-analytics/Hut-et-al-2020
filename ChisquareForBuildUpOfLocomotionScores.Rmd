@@ -1,0 +1,63 @@
+---
+title: "Notebook for chi-square test on observation moment"
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Using 4 categories
+
+```{r}
+
+if(!require(rcompanion)){install.packages("rcompanion")}
+Input =("
+Status     Healthy  Diseased
+'1'         414       233
+'2'         381       266
+'3'         321       325
+'4'         297       348
+")
+
+MatrixAll = as.matrix(read.table(textConnection(Input),
+                   header=TRUE,
+                   row.names=1))
+
+chisq.test(MatrixAll)
+
+pairwiseNominalIndependence(MatrixAll,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "bonferroni")
+```
+
+# Using 2 categories pre and post
+
+```{r}
+
+
+Input =("
+Status     Healthy  Diseased
+'Pre'         795       499
+'Post'         618       673
+")
+
+MatrixPrePost = as.matrix(read.table(textConnection(Input),
+                   header=TRUE,
+                   row.names=1))
+
+chisq.test(MatrixPrePost)
+
+pairwiseNominalIndependence(MatrixPrePost,
+                            fisher = FALSE,
+                            gtest  = FALSE,
+                            chisq  = TRUE,
+                            method = "bonferroni")
+
+```
+
+
+

@@ -1,0 +1,508 @@
+---
+title: "Data import for locomotion prediction in SenseOfSensors"
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Explanation
+
+https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#model-specification
+
+# Data extraction, transformation and loading
+
+## Packages loaded
+
+```{r warning=FALSE}
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
+if (!require("readr")) {
+  install.packages("readr", dependencies = TRUE)
+  library(readr)
+  citation("readr")
+}
+#data manipulation
+if (!require("dplyr")) {
+  install.packages("dplyr", dependencies = TRUE)
+  library(dplyr)
+  citation("dplyr")
+}
+#data manipulation
+if (!require("tidyr")) {
+  install.packages("tidyr", dependencies = TRUE)
+  library(tidyr)
+  citation("tidyr")
+}
+if (!require("stringr")) {
+  install.packages("stringr", dependencies = TRUE)
+  library(stringr)
+  citation("stringr")
+}
+#%LIKE%
+if (!require("data.table")) {
+  install.packages("data.table", dependencies = TRUE)
+  library(data.table)
+  citation("data.table")
+}
+if (!require("lubridate")) {
+  install.packages("lubridate", dependencies = TRUE) 
+  library(lubridate)
+  citation("lubridate")
+}
+#random forest
+if (!require("caret")) {
+  install.packages("caret", dependencies = TRUE)
+  library(caret)
+}
+#Anova
+if (!require("car")) {
+  install.packages("car", dependencies = TRUE)
+  library(car)
+}
+```
+
+## Data anonymisation
+
+Make sure you have a file with Anonymization.R which contains some salt for the anonymisation
+
+```{r include=TRUE}
+source("../Anonymization.R")
+#anony
+if (!require("anonymizer")) {
+  devtools::install_github("paulhendricks/anonymizer")
+  library(anonymizer)
+}
+citation("anonymizer")
+anoCols <- c("HerdIdentifier", "AnimalIdentifier", "AnimalEartag")
+```
+
+```{r}
+LocomotionData <- 
+  read_csv(
+    "../Data/LocomotionAndBCSData.csv", 
+    col_types = cols(
+      DaysInMilk = col_integer(), 
+      HerdIdentifier = col_character(), 
+      LOCO = col_double(), 
+      LactationNumber = col_integer())) %>%
+  dplyr::filter(LactationNumber > 1) %>%
+  dplyr::mutate(
+    CalvingDate = as.Date(CalvingTime, format="%Y-%m-%d"),
+    CalvingSeason = case_when(
+                    between(month(CalvingDate), 1, 3) ~ "Winter",
+                    between(month(CalvingDate), 4, 6) ~ "Spring",
+                    between(month(CalvingDate), 7, 9) ~ "Summer",
+                    between(month(CalvingDate), 10, 12) ~ "Autumn"),
+    AnimalEartag = as.character(AnimalNumber),
+    HerdIdentifier = as.character(HerdIdentifier),
+    AnimalIdentifier = as.character(AnimalIdentifier),
+    LocomotionScore = as.factor(case_when(
+                    LOCO <= 3 ~ "1-3",
+                    TRUE ~ "4-5")),
+    LocomotionScore = relevel(LocomotionScore, ref = "1-3")
+    ) %>% # Only select the necesarry columns
+  dplyr::mutate_at(vars(anoCols), anonymizer::anonymize, .char = anoSalt) %>%
+  dplyr::select(
+    AnimalIdentifier,
+    HerdIdentifier,
+    LactationNumber,
+    LocomotionScore,
+    ObservationPeriod,
+    ObservationDate,
+    CalvingSeason
+  )
+
+LocomotionDataWeek4 <- LocomotionData %>% dplyr::filter(ObservationPeriod == "WEEK 4")
+LocomotionDataWeek8 <- LocomotionData %>% dplyr::filter(ObservationPeriod == "WEEK 8")
+```
+
+## BCS data
+
+```{r}
+BCSData <- 
+  read_csv(
+    "../Data/LocomotionAndBCSData.csv", 
+    col_types = cols(
+      DaysInMilk = col_integer(), 
+      HerdIdentifier = col_character(), 
+      LactationNumber = col_integer())) %>%
+  dplyr::mutate(
+    CalvingDate = as.Date(CalvingTime, format="%Y-%m-%d"),
+    AnimalEartag = as.character(AnimalNumber),
+    HerdIdentifier = as.character(HerdIdentifier),
+    AnimalIdentifier = as.character(AnimalIdentifier),
+    ObservationPeriod = case_when(
+                    ObservationPeriod == "BEGIN DROOGSTAND" ~ "BCSEarlyDryPeriod",
+                    ObservationPeriod == "EIND DROOGSTAND" ~ "BCSEndDryPeriod",
+                    ObservationPeriod == "WEEK 4" ~ "BCSWeek4",
+                    ObservationPeriod == "WEEK 8" ~ "BCSWeek8"),
+    Parity = as.factor(case_when(
+                    LactationNumber == 2 ~ "2",
+                    LactationNumber == 3 ~ "3",
+                    TRUE ~ ">3")),
+    Parity = relevel(Parity, ref = "2")
+    ) %>% # Only select the necesarry columns
+  dplyr::mutate_at(vars(anoCols), anonymizer::anonymize, .char = anoSalt) %>%
+  dplyr::group_by(
+    AnimalIdentifier,
+    HerdIdentifier,
+    LactationNumber,
+    ObservationPeriod,
+    Parity
+  ) %>%
+  dplyr::summarise(BCS = mean(BCS, na.rm = TRUE)) %>%
+  tidyr::spread(key = ObservationPeriod, value = BCS, convert = TRUE) %>%
+  dplyr::mutate(
+    BCSChangeDryPeriod = BCSEndDryPeriod - BCSEarlyDryPeriod,
+    BCSChangeTransition =  BCSWeek4 - BCSEndDryPeriod,
+    BCSChangePost =  BCSWeek8 - BCSWeek4,
+    BCSEndDryPeriodCat = factor(case_when(
+      BCSEndDryPeriod < 3.0 ~ "< 3.0",
+      between(BCSEndDryPeriod, 3.0, 3.5) ~ "3.0 to 3.5",
+      BCSEndDryPeriod > 3.5 ~ "> 3.5"),
+      levels= c("3.0 to 3.5", "< 3.0",  "> 3.5")
+    ),
+    BCSWeek4Cat = factor(case_when(
+      BCSWeek4 < 2.5 ~ "< 2.5",
+      between(BCSWeek4, 2.5, 2.75) ~ "2.5 to 2.75",
+      BCSWeek4 > 2.75 ~ "> 2.75"),
+      levels= c("2.5 to 2.75", "< 2.5", "> 2.75")
+    ),
+    BCSWeek8Cat = factor(case_when(
+      BCSWeek8 < 2.25 ~ "< 2.25",
+      between(BCSWeek8, 2.25, 2.75) ~ "2.25 to 2.75",
+      BCSWeek8 > 2.75 ~ "> 2.75"),
+      levels= c("2.25 to 2.75", "< 2.25", "> 2.75")
+    ),
+    BCSChangeDryPeriodCat = factor(case_when(
+      BCSChangeDryPeriod < 0.00 ~ "Decrease",
+      between(BCSChangeDryPeriod, 0.0, 0.25) ~ "Increase 0.00 to 0.25",
+      BCSChangeDryPeriod > 0.25 ~ "Increase > 0.25"),
+      levels= c("Increase 0.00 to 0.25", "Decrease", "Increase > 0.25")
+    ),
+    BCSChangeTransitionCat = factor(case_when(
+      BCSChangeTransition < -0.75 ~ "Decrease > 0.75",
+      between(BCSChangeTransition, -0.75, -0.5) ~ "Decrease 0.50 to 0.75",      
+      BCSChangeTransition > -0.5 ~ "Decrease < 0.50"),
+      levels= c("Decrease 0.50 to 0.75", "Decrease > 0.75", "Decrease < 0.50")
+    ),
+    BCSChangePostCat = factor(case_when(
+      BCSChangePost < -0.25 ~ "Decrease > 0.25",
+      between(BCSChangePost, -0.25, 0.00) ~ "Decrease 0.00 to 0.25",      
+      BCSChangePost > 0.0 ~ "Increase/Stable"),
+      levels= c("Decrease 0.00 to 0.25", "Decrease > 0.25", "Increase/Stable")
+    )
+  )
+quantile(BCSData$BCSWeek4, c(0.33, 0.66), na.rm = TRUE)
+quantile(BCSData$BCSWeek8, c(0.33, 0.66), na.rm = TRUE)
+quantile(BCSData$BCSChangeTransition, c(0.33, 0.66), na.rm = TRUE)
+quantile(BCSData$BCSChangePost, c(0.33, 0.66), na.rm = TRUE)
+xtabs(data = BCSData, ~ BCSWeek4Cat + BCSChangeTransitionCat)
+
+quantile(BCSData$BCSEndDryPeriod, c(0.33, 0.66), na.rm = TRUE)
+quantile(BCSData$BCSChangeDryPeriod, c(0.33, 0.66), na.rm = TRUE)
+xtabs(data = BCSData, ~ BCSEndDryPeriodCat + BCSChangeDryPeriodCat)
+
+xtabs(data = BCSData, ~ BCSWeek4Cat + BCSChangePostCat)
+xtabs(data = BCSData, ~ BCSWeek8Cat + BCSChangePostCat)
+
+plot(x= BCSData$BCSEndDryPeriod, y = BCSData$BCSChangeTransition)
+write.csv2(BCSData, file="../Data/BCSData.csv", na="", dec = ".", row.names = FALSE)
+```
+
+## Dry period data
+
+```{r}
+DryPeriodLengthData <- 
+  read_csv(
+    "../Data/LocomotionAndBCSData.csv", 
+    col_types = cols(
+      DaysInMilk = col_integer(), 
+      HerdIdentifier = col_character(), 
+      LactationNumber = col_integer())) %>%
+  dplyr::filter(ObservationPeriod == "BEGIN DROOGSTAND") %>%
+  dplyr::mutate(
+    CalvingDate = as.Date(CalvingTime, format="%Y-%m-%d"),
+    AnimalEartag = as.character(AnimalNumber),
+    HerdIdentifier = as.character(HerdIdentifier),
+    AnimalIdentifier = as.character(AnimalIdentifier),
+    ObservationPeriod = case_when(
+                    ObservationPeriod == "BEGIN DROOGSTAND" ~ "BCSEarlyDryPeriod",
+                    ObservationPeriod == "EIND DROOGSTAND" ~ "BCSEndDryPeriod",
+                    ObservationPeriod == "WEEK 4" ~ "BCSWeek4",
+                    ObservationPeriod == "WEEK 8" ~ "BCSWeek8"),
+    Parity = as.factor(case_when(
+                    LactationNumber == 2 ~ "2",
+                    LactationNumber == 3 ~ "3",
+                    TRUE ~ ">3")),
+    Parity = relevel(Parity, ref = "2"),
+    DryPeriodLength = as.numeric(difftime(CalvingDate,ObservationDate)),
+    DryPeriodLengthCat = factor(case_when(
+      DryPeriodLength < 34 ~ "Dry period <34",
+      between(DryPeriodLength, 34, 43) ~ "Dry period 34-43",      
+      DryPeriodLength > 43 ~ "Dry period >43"),
+      levels= c("Dry period 34-43", "Dry period <34", "Dry period >43")
+    )
+    ) %>% # Only select the necesarry columns
+  dplyr::mutate_at(vars(anoCols), anonymizer::anonymize, .char = anoSalt) %>%
+  dplyr::filter(between(DryPeriodLength, 0, 1000)) %>%
+  dplyr::select(
+      AnimalIdentifier, 
+      HerdIdentifier, 
+      LactationNumber,
+      DryPeriodLength,
+      DryPeriodLengthCat
+  )
+
+quantile(DryPeriodLengthData$DryPeriodLength, c(0.33, 0.66), na.rm = TRUE)
+hist(DryPeriodLengthData$DryPeriodLength)
+```
+
+## Combined data
+
+```{r}
+Week8Data <- LocomotionDataWeek8 %>%
+  inner_join(
+    BCSData %>% dplyr::select(
+      AnimalIdentifier, 
+      HerdIdentifier, 
+      LactationNumber,
+      Parity,
+      BCSEndDryPeriodCat,
+      BCSWeek4Cat,
+      BCSWeek8Cat,
+      BCSChangeDryPeriodCat,
+      BCSChangeTransitionCat,
+      BCSChangePostCat
+    ),
+    by = c("AnimalIdentifier", 
+           "HerdIdentifier", 
+           "LactationNumber")
+    ) %>%
+  inner_join(
+    DryPeriodLengthData,
+    by = c("AnimalIdentifier", 
+           "HerdIdentifier", 
+           "LactationNumber")
+    ) %>%
+  drop_na()
+
+names(Week8Data) <- gsub("[^[:alnum:]]","",names(Week8Data))
+
+xtabs(~Week8Data$BCSWeek4Cat + Week8Data$BCSChangeTransitionCat)
+write.csv2(Week8Data, file="../Data/Week8Data.csv", na="", dec = ".", row.names = FALSE)
+```
+
+# Association model locomotion score week 8
+
+```{r}
+if (!require("lme4")) {
+  install.packages("lme4", dependencies = TRUE)
+  library(lme4)
+  citation("lme4")
+}
+levels(Week8Data$LocomotionScore)
+```
+
+## Model Dry and Transition Period
+
+
+```{r}
+Model0.0 <- glmer(formula = LocomotionScore ~ 1 + 
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.0 <- glmer(formula = LocomotionScore ~ Parity +
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.1 <- glmer(formula = LocomotionScore ~ CalvingSeason + 
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.2 <- glmer(formula = LocomotionScore ~ BCSEndDryPeriodCat + 
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.3 <- glmer(formula = LocomotionScore ~ BCSChangeDryPeriodCat +   
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.4 <- glmer(formula = LocomotionScore ~ BCSChangeTransitionCat +  
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.5 <- glmer(formula = LocomotionScore ~ BCSWeek4Cat + 
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.6 <- glmer(formula = LocomotionScore ~ BCSWeek8Cat + 
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.7 <- glmer(formula = LocomotionScore ~ BCSChangePostCat +  
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+Model1.8 <- glmer(formula = LocomotionScore ~ DryPeriodLengthCat +  
+                     (1|HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+```
+
+```{r}
+anova(Model0.0, Model1.0)
+anova(Model0.0, Model1.1)
+anova(Model0.0, Model1.2)
+anova(Model0.0, Model1.3)
+anova(Model0.0, Model1.4)
+anova(Model0.0, Model1.5)
+anova(Model0.0, Model1.6)
+anova(Model0.0, Model1.7)
+anova(Model0.0, Model1.8)
+```
+
+```{r}
+Model2.0 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    BCSEndDryPeriodCat + BCSChangeDryPeriodCat +
+                    BCSWeek4Cat + BCSChangeTransitionCat + 
+                    BCSWeek8Cat + BCSChangePostCat + 
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+Model2.1 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    BCSEndDryPeriodCat*BCSChangeDryPeriodCat +
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+Model2.2 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    BCSWeek4Cat*BCSChangeTransitionCat + 
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+Model2.3 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    BCSWeek8Cat*BCSChangeTransitionCat + 
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+Model2.4 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    BCSWeek8Cat + 
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+Model2.5 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    BCSChangeTransitionCat + 
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+Model2.6 <- glmer(formula = LocomotionScore ~ Parity + CalvingSeason + 
+                    DryPeriodLength + 
+                    (1 | HerdIdentifier),
+                   data = Week8Data,
+                   family = binomial(link = logit),
+                   control=glmerControl(optimizer="bobyqa",
+                                        optCtrl=list(maxfun=2e5)))
+
+anova(Model2.0, Model2.1, Model2.2, Model2.3, Model2.4, Model2.5, Model2.6, test = "Chisq")
+```
+
+```{r}
+Anova(Model2.4)
+```
+
+# Final model selection
+
+```{r}
+finalModel <- Model2.4
+```
+
+
+## Summary
+
+```{r}
+summary(finalModel)
+Anova(finalModel)
+```
+## Confidence intervals
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+#confint(finalModel, parm="beta_")
+confint(finalModel)
+```
+
+## Least square means and contrasts
+
+```{r message=FALSE, warning=FALSE}
+lsmeans::contrast(lsmeans::lsmeans(finalModel, ~Parity, type = "response"), 
+          alpha=0.05, 
+          method="pairwise", 
+          adjust="Tukey")
+confint(lsmeans::contrast(lsmeans::lsmeans(finalModel, ~Parity, type = "response"), 
+          alpha=0.05, 
+          method="pairwise", 
+          adjust="Tukey"))
+lsmeans::contrast(lsmeans::lsmeans(finalModel, ~CalvingSeason, type = "response"), 
+          alpha=0.05, 
+          method="pairwise", 
+          adjust="Tukey")
+confint(lsmeans::contrast(lsmeans::lsmeans(finalModel, ~CalvingSeason, type = "response"), 
+          alpha=0.05, 
+          method="pairwise", 
+          adjust="Tukey"))
+
+lsmeans::contrast(lsmeans::lsmeans(finalModel, ~BCSWeek8Cat, type = "response"), 
+          alpha=0.05, 
+          method="pairwise", 
+          adjust="Tukey")
+confint(lsmeans::contrast(lsmeans::lsmeans(finalModel, ~BCSWeek8Cat, type = "response"), 
+          alpha=0.05, 
+          method="pairwise", 
+          adjust="Tukey"))
+
+```

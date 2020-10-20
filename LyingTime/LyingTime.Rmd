@@ -1,0 +1,295 @@
+---
+title: "Lying Time"
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r include=FALSE}
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
+if (!require("magrittr")) {
+  install.packages("magrittr", dependencies = TRUE)
+  library(magrittr)
+}
+#data manipulation
+if (!require("dplyr")) {
+  install.packages("dplyr", dependencies = TRUE)
+  library(dplyr)
+}
+#drop_na
+if (!require("tidyr")) {
+  install.packages("tidyr", dependencies = TRUE)
+  library(tidyr)
+}
+#cld
+if (!require("multcompView")) {
+  install.packages("multcompView", dependencies = TRUE)
+  library(multcompView)
+}
+#%LIKE%
+if (!require("data.table")) {
+  install.packages("data.table", dependencies = TRUE)
+  library(data.table)
+}
+#glmer
+if (!require("lme4")){install.packages("lme4", dependencies = TRUE)
+  library(lme4)
+}
+#lsmeans
+if (!require("lsmeans")){install.packages("lsmeans", dependencies = TRUE)
+  library(lsmeans)
+}
+
+#effects plot
+if (!require("effects")) {
+  install.packages("effects", dependencies = TRUE)
+  library(effects)
+}
+if (!require("car")) {
+  install.packages("car", dependencies = TRUE)
+  library(car)
+}
+if (!require("ggplot2")) {
+  install.packages("ggplot2", dependencies = TRUE)
+  library(ggplot2)
+}
+
+if (!require("ggpubr")) {
+  install.packages("ggpubr", dependencies = TRUE)
+  library(ggpubr)
+}
+```
+
+# Read the data
+
+* Filter only the locomotion scores
+* Refactor the scores to only 3 classes (1-2 vs 3 vs 4-5)
+* Refactor the observation moments
+
+```{r}
+load("../Data/AllData.RData")
+```
+
+# Data preparation
+
+```{r}
+AnalysisData <- AllData %>% filter(
+                                SensorType  %like% "lyingSummary" &
+                                SensorValue < 10000 # Values < 100 very unlikely
+    ) %>%
+  dplyr::mutate(
+                  CalvingTime = as.Date(CalvingTime,format = "%Y-%m-%dT%H:%M:%OSZ"),
+                  CalvingSeason = case_when(
+                    between(month(CalvingTime), 1, 3) ~ "Winter",
+                    between(month(CalvingTime), 4, 6) ~ "Spring",
+                    between(month(CalvingTime), 7, 9) ~ "Summer",
+                    between(month(CalvingTime), 10, 12) ~ "Autumn")
+                  ) %>% 
+  dplyr::group_by(
+    AnimalNumber,
+    HerdIdentifier,
+    ObservationMoment,
+    LocomotionScore,
+    ObservationPeriod,
+    LactationNumber,
+    Parity,
+    CalvingSeason
+    ) %>% 
+  dplyr::summarise(
+    SensorValue = mean(SensorValue,na.rm = TRUE),
+    SensorValues = n()
+    )  %>%  
+  dplyr::filter(
+    SensorValues == 4
+  ) %>%  
+  dplyr::arrange(AnimalNumber,HerdIdentifier) %>%
+  dplyr::group_by(AnimalNumber, HerdIdentifier) %>%
+  dplyr::mutate(LocomotionMoments = length(LocomotionScore)) %>%
+  filter(LocomotionMoments == 4) %>%    #4 locomotionscores minimum
+  drop_na()
+
+AnalysisData %>% select("HerdIdentifier", "AnimalNumber", "LactationNumber") %>% n_distinct()
+
+hist(AnalysisData$SensorValue,
+     main = "Lying behaviour",
+     xlab = "Lying behaviour (min/day)")
+```
+
+# Model building
+
+## Baseline model without any variable
+
+```{r}
+baselineLMM <- lmer(
+                  SensorValue ~ 1 + (1| AnimalNumber), 
+                  REML = F,
+                  data = AnalysisData
+                  )
+qqnorm(residuals(baselineLMM, type = 'pearson'))
+```
+
+## Full model using the nested repeated measures GLMM
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+LMM <- lmer(
+                  SensorValue ~ 
+                    LocomotionScore + ObservationPeriod + ObservationMoment + CalvingSeason +
+                    ObservationPeriod:ObservationMoment +
+                    ObservationPeriod:LocomotionScore +
+                    ObservationMoment:LocomotionScore + 
+                    ObservationPeriod:LocomotionScore:ObservationMoment + 
+                    HerdIdentifier + 
+                    Parity +  (1 | AnimalNumber),
+                  REML = FALSE,
+                  data = AnalysisData
+                  )
+qqnorm(residuals(LMM))
+```
+
+## Comparison of baseline and nested model
+
+```{r}
+anova(LMM,baselineLMM, test="Chisq")
+```
+
+
+## Full model
+
+```{r}
+LMMdrop <- drop1(LMM, test="Chisq")
+if("Pr(>F)" %in% colnames(LMMdrop))
+{
+  Pvalues <- LMMdrop$`Pr(>F)`
+} else 
+{
+  Pvalues <- LMMdrop$`Pr(Chi)`
+}
+LMMdrop
+```
+
+## Model fit 2-way interactions
+
+```{r}
+LMMReduced = update(LMM, . ~ . - LocomotionScore:ObservationPeriod:ObservationMoment)
+drop1(LMMReduced, test="Chisq")
+```
+
+# Final model
+
+## Model fit
+
+```{r}
+LMMReduced = update(LMMReduced, . ~ . - LocomotionScore:ObservationMoment - ObservationPeriod:ObservationMoment - LocomotionScore:ObservationPeriod)
+drop1(LMMReduced, test="Chisq")
+```
+
+## Type 3 Analysis of Variance
+
+```{r}
+anova(LMMReduced, ddf="Satterthwaite")
+```
+
+## Summary
+
+```{r}
+print(summary(LMMReduced, ddf="Satterthwaite"),correlation=FALSE)
+```
+
+## Parameter estimate confidence intervals
+
+```{r}
+confint(LMMReduced, parm="beta_")
+```
+
+## Least square means
+
+```{r message=FALSE, warning=FALSE}
+multcomp::cld(marginalHerds <- lsmeans::lsmeans(LMMReduced, ~ HerdIdentifier), alpha=0.05, Letters=letters, adjust="tukey")
+
+multcomp::cld(marginalParity <- lsmeans::lsmeans(LMMReduced, ~ Parity), alpha=0.05, Letters=letters, adjust="tukey") 
+
+multcomp::cld(marginalLocomotionScore <- lsmeans::lsmeans(LMMReduced, ~ LocomotionScore), alpha=0.05, Letters=letters, adjust="tukey")
+
+multcomp::cld(marginalObservationMoment <- lsmeans::lsmeans(LMMReduced, ~ ObservationMoment), alpha=0.05, Letters=letters, adjust="tukey")
+
+multcomp::cld(marginalInteraction <- lsmeans::lsmeans(LMMReduced, ~ ObservationPeriod), alpha=0.05, Letters=letters)
+
+multcomp::cld(marginalInteraction <- lsmeans::lsmeans(LMMReduced, ~ CalvingSeason), alpha=0.05, Letters=letters)
+```
+
+# Interaction plots
+
+## Data preparation
+
+```{r}
+LSMs<-lsmeans::lsmeans(LMMReduced, pairwise ~ LocomotionScore, glhargs=list())
+dfPValues <- summary(LSMs)[[2]]
+dfLMSs <- summary(LSMs)[[1]]
+dfResults <- cbind(dfLMSs[,!(names(dfLMSs) %in% c("df", "ObservationPeriod", "SE"))], dfPValues)
+dfPValuesSplit <- dfResults %>% 
+                    tidyr::separate(contrast, c("group1", "group2"), " - ", remove=FALSE) %>%
+                    dplyr::arrange(-lsmean) %>%
+                    dplyr::mutate(
+                                  p.value = round(p.value, 2),
+                                  p.value.2 = cut(p.value, 
+                                        breaks = c(-Inf,0.001,0.01,0.05,0.1,Inf),
+                                        labels = c("***","**","*","†","ns")),
+                                  y.position.2 = cummax(lsmean),
+                                  y.position.3 = case_when(contrast == "1-2 - 4-5" ~ y.position.2*1.15, 
+                                                           contrast == "1-2 - 3" ~ y.position.2*1.1,
+                                                           TRUE ~ y.position.2*1.05)
+                    )
+```
+
+## Plot
+
+```{r}
+ggplot(
+  data=dfPValuesSplit, 
+  aes(
+    x=LocomotionScore, 
+    y=lsmean,
+    fill=LocomotionScore)) + 
+  geom_bar(
+    stat="identity"
+    ) + 
+  coord_cartesian(ylim = c(min(dfPValuesSplit$lsmean)*0.9, 
+                           max(dfPValuesSplit$lsmean)*1.15),
+                  expand = TRUE) +
+  scale_fill_manual(
+    values=c("#b3e0a6","#fda50f", "#9e3d22")
+    ) +
+  geom_text(
+    aes(
+      label=sprintf("%0.1f", round(lsmean, digits = 1))
+      ),
+    vjust=5, 
+    size=3.5
+    )+
+  geom_errorbar(
+    aes(
+      ymin=lower.CL, 
+      ymax=upper.CL), 
+    width=.2,
+    position=position_dodge(.9)
+    ) +
+  labs(
+    title = "Lying time (min/day)", 
+    x= "Locomotion score", 
+    y=""
+    )  + 
+  theme_classic() + 
+  theme(text=element_text(size=10)) +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  stat_pvalue_manual(comparisons = list( c("1-2", "3"), c("3", "4-5"), c("1-2", "4-5")),
+                     label.size = 3,
+                     data = dfPValuesSplit,
+                     y.position =  "y.position.3",
+                     label = "p.value.2") + 
+  theme(legend.position = "none")
+```
