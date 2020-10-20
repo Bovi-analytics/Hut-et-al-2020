@@ -1,7 +1,7 @@
 Notebook for Hut et al. 2019
 ================
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108604.svg)](https://doi.org/10.5281/zenodo.4108604)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108604.svg)](https://github.com/Bovi-analytics/Hut-et-al-2020)
 
 # Getting the data from the bovi-analytics blob storage
 
@@ -31,7 +31,7 @@ from the animals.
 # Data exploration
 
 The underlying images can be seen in the
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108642.svg)](https://doi.org/10.5281/zenodo.4108642):
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108642.svg)](https://public.tableau.com/profile/bovianalytics#!/vizhome/Hutetal_2020/TransitionBodyConditionScore):
 
   - Make sure to have the data downloaded on disk
   - Make sure to have the data referenced correctly in the workbook
