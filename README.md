@@ -153,3 +153,7 @@ The underlying images can be seen in the
 # Review 2
 
   - Added calving season
+
+# Review 3
+
+  - Added association models
