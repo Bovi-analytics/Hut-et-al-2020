@@ -1,40 +1,9 @@
 Notebook for Hut et al. 2019
 ================
 
-  - [Data exploration](#data-exploration)
-      - [Overview of all sensors and locomotion
-        scores](#overview-of-all-sensors-and-locomotion-scores)
-      - [Overview of sensors value
-        distributions](#overview-of-sensors-value-distributions)
-      - [Overview of activity sensors
-        values](#overview-of-activity-sensors-values)
-      - [Overview of eating sensors
-        values](#overview-of-eating-sensors-values)
-      - [Overview of BCS data and
-        changes](#overview-of-bcs-data-and-changes)
-  - [Models](#models)
-      - [Activity](#activity)
-      - [Eating behaviour](#eating-behaviour)
-      - [Rumination behaviour](#rumination-behaviour)
-      - [Prediction models including
-        BCS](#prediction-models-including-bcs)
-      - [Association models BCS vs
-        LocomotionScores](#association-models-bcs-vs-locomotionscores)
-  - [Remarks and meeting notes](#remarks-and-meeting-notes)
-      - [Meeting Mirjam Nielen](#meeting-mirjam-nielen)
-      - [Meeting Mirjam, Jan, Miel & Peter
-        (23-04-2019)](#meeting-mirjam-jan-miel-peter-23-04-2019)
-      - [Meeting Jan](#meeting-jan)
-      - [Meeting Mirjam, Jan, Miel, Peter & Klaas
-        (27-05-2019)](#meeting-mirjam-jan-miel-peter-klaas-27-05-2019)
-      - [Major update with NEW DATA](#major-update-with-new-data)
-      - [Figure update](#figure-update)
-  - [Review 1](#review-1)
-  - [Review 2](#review-2)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108604.svg)](https://doi.org/10.5281/zenodo.4108604)
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you
-execute code within the notebook, the results appear beneath the code.
-\# Getting the data from the bovi-analytics blob storage
+# Getting the data from the bovi-analytics blob storage
 
 You will need to get access key via Miel Hostens (<m.m.hostens@uu.nl>)
 
@@ -61,8 +30,8 @@ from the animals.
 
 # Data exploration
 
-The underlying images can be seen in the [Tableau
-workbook](Visuals/SenseOfSensorsv2.twb):
+The underlying images can be seen in the
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108642.svg)](https://doi.org/10.5281/zenodo.4108642):
 
   - Make sure to have the data downloaded on disk
   - Make sure to have the data referenced correctly in the workbook
@@ -114,21 +83,12 @@ workbook](Visuals/SenseOfSensorsv2.twb):
   - [Link to model Rumination Bout
     Length](RuminationBoutLength/PredictionLocoChange.md)
 
-## Prediction models including BCS
-
-  - [Link to model Week 4 locomotion
-    prediction](PredictionModels/RuminationTime.md)
-  - [Link to model Week 8 locomotion
-    prediction](PredictionModels/RuminationBouts.md)
-  - [Link to model AllWeeks locomotion
-    prediction](PredictionModels/RuminationBoutLength.md)
-
 ## Association models BCS vs LocomotionScores
 
   - [Link to model Week 4
-    locomotion](AssociationModels/AssociationLocoWeek4.md)
+    locomotion](AssociationModels/AssociationLoco1-2Week4.md)
   - [Link to model Week 8
-    locomotion](AssociationModels/AssociationLocoWeek8.md)
+    locomotion](AssociationModels/AssociationLoco1-2Week8.md)
 
 # Remarks and meeting notes
 
