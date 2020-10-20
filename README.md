@@ -76,12 +76,10 @@ The underlying images can be seen in the
 
 ## Rumination behaviour
 
-  - [Link to model Rumination
-    Time](RuminationTime/PredictionLocoWeek4.md)
-  - [Link to model Rumination
-    Bouts](RuminationBouts/PredictionLocoWeek8.md)
+  - [Link to model Rumination Time](RuminationTime/RuminationTime.md)
+  - [Link to model Rumination Bouts](RuminationBouts/RuminationBouts.md)
   - [Link to model Rumination Bout
-    Length](RuminationBoutLength/PredictionLocoChange.md)
+    Length](RuminationBoutLength/RuminationBoutLength.md)
 
 ## Association models BCS vs LocomotionScores
 
