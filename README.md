@@ -3,6 +3,8 @@ Notebook for Hut et al. 2021
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4108604.svg)](https://github.com/Bovi-analytics/Hut-et-al-2020)
 
+[Link to Journal of Dairy Science](https://doi.org/10.3168/jds.2020-19200)
+
 # Getting the data from the bovi-analytics blob storage
 
 You will need to get access key via Miel Hostens (<m.m.hostens@uu.nl>)
